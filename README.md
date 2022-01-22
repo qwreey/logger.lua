@@ -3,6 +3,12 @@
 This library is mono module library, so if you want to use this library, just copy logger.lua into fit of directory in your workspace  
 This module is too simple! so it doesn need to described much!
 
+# Install with lit package manager
+
+```
+lit install qwreey75/logger
+```
+
 # Features
 
 ## Many Lua Platforms
