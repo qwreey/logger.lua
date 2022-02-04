@@ -146,6 +146,7 @@ local rootLen = #root
 
 -- ascii formatting
 local ansiiFormat = "%s[%s]\27[0m"
+local tab = char(9);
 local ansii = {
 	[char(1)]   = "SOH";
 	[char(2)]   = "STX";
@@ -154,7 +155,7 @@ local ansii = {
 	[char(5)]   = "ENQ";
 	[char(7)]   = "BEL";
 	[char(8)]   = "BS";
-	[char(9)]   = "TAB"; -- tab character
+	-- [char(9)]   = "TAB"; -- tab character
 	[char(11)]  = "VT"; -- vertical tab character
 	[char(12)]  = "FF"; -- form feed character
 	[char(14)]  = "SO";
@@ -177,13 +178,16 @@ local ansii = {
 	[char(31)]  = "US";
 	[char(127)] = "DEL";
 }
-local esc = "(" .. char(27).."(%[?))"
+-- local esc = "(" .. char(27).."(%[?))"
+local tabChar = " →  │"
+local tabCharColor = "\27[90m" .. tabChar .. "\27[0m"
 local spcColor = "\27[30;45m" -- 4 (underline)
 local function processMessage(str,useColor)
 	local color = useColor and spcColor or ""
 	for i,v in pairs(ansii) do
 		str = gsub(str,i,format(ansiiFormat,color,v))
 	end
+	str = gsub(str,tab,useColor and tabCharColor or tabChar)
 	-- for colors end ansi terminal escapes
 	-- str = gsub(str,esc,function (all,isEscape)
 	-- 	return (isEscape == "") and format(ansiiFormat,color,"ESC") or str

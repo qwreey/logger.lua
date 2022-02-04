@@ -47,6 +47,11 @@ logger.fatal("Fatal level")
 logger.warn("Warn level")
 ```
 
+## Tab Character
+
+Tab character will display as ' →  │'  
+![tab](img/tab.png)  
+
 ## Escape Special Characters
 
 It displays special characters as highlighted text
