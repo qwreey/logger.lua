@@ -234,10 +234,10 @@ local function base(levelName,levelNumber,color,debugInfo,object)
 			src = sub(src,rootLen+2,-1)
 		end
 		src = gsub(gsub(gsub(gsub(src,
-			"%.lua$",""),  -- remove .lua
-			"^%.[\\/]",""),    -- remove ./
+			"%.lua$",""), -- remove .lua
+			"^%.[\\/]",""), -- remove ./
 			"[\\/]","."), -- change / and \ into .
-			"%.init$",""   -- remove .init
+			"%.init$","" -- remove .init
 		)
 		lineinfo = format("%s:%s",src,tostring(debugInfo.currentline)) -- source:line
 	end
