@@ -195,6 +195,21 @@ local function processMessage(str,useColor)
 	return str
 end
 
+local function writeStdout(str,refreshLine)
+	if stdoutWrite then
+		-- use luvit's prettyPrint library
+		stdoutWrite(stdout,str)
+	else
+		-- use lua standard library
+		iwrite(concat(str))
+	end
+	-- refresh readline
+	if refreshLine then
+		refreshLine()
+	end
+end
+local wrap = coroutine.wrap
+
 -- base function
 local function base(levelName,levelNumber,color,debugInfo,object)
 	-- check / load settings
@@ -263,19 +278,9 @@ local function base(levelName,levelNumber,color,debugInfo,object)
 
 	-- write into stdout
 	if not log.noStdout then
-		if stdoutWrite then
-			-- use luvit's prettyPrint library
-			stdoutWrite(stdout,str)
-		else
-			-- use lua standard library
-			iwrite(concat(str))
-		end
+		wrap(writeStdout)(str,refreshLine)
 	end
 
-	-- refresh readline
-	if refreshLine then
-		refreshLine()
-	end
 
 	-- Append into file
 	if outfile then
