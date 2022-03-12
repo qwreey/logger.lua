@@ -211,7 +211,7 @@ end
 local wrap = coroutine.wrap
 
 -- base function
-local function base(levelName,levelNumber,color,debugInfo,object)
+local function base(levelName,levelNumber,color,debugInfo,object,override)
 	-- check / load settings
 	if log.disable then return -- If log is disabled, return this
 	elseif levelNumber < log.minLevel then return end -- If it not enough to display, return this
@@ -219,13 +219,13 @@ local function base(levelName,levelNumber,color,debugInfo,object)
 	local msg = dump and (objectType == "string" and object or dump(object)) or tostring(object) -- stringify message
 	local refreshLine = log.refreshLine;
 	local buildPrompt = (not refreshLine) and (log.buildPrompt or _G.buildPrompt); ---@diagnostic disable-line
-	local usecolor = log.usecolor
-	local prefix = log.prefix
-	local outfile = log.outfile
+	local usecolor = override and override.usecolor or log.usecolor
+	local prefix = override and override.prefix or log.prefix
+	local outfile = override and override.outfile or log.outfile
 
 	-- Get file name and line number
 	local lineinfo
-	local replaceinfo = logger.noLineInfo
+	local replaceinfo = override and override.noLineInfo or logger.noLineInfo
 	if replaceinfo then
 		lineinfo = type(replaceinfo) == "string" and replaceinfo or ""
 	else
@@ -281,7 +281,6 @@ local function base(levelName,levelNumber,color,debugInfo,object)
 		wrap(writeStdout)(str,refreshLine)
 	end
 
-
 	-- Append into file
 	if outfile then
 		local data = format("[%-6s%s] %s: %s\n",
@@ -323,10 +322,10 @@ for level,v in pairs(modes) do
 	v.level = level
 	v.upName = upName
 
-	log[name] = function (object,debugInfo)
+	log[name] = function (object,debugInfo,override)
 		local typeDebugInfo = type(debugInfo);
 		debugInfo = (typeDebugInfo == "table" and debugInfo) or (typeDebugInfo == "number" and getinfo(1 + debugInfo,"Sl")) or getinfo(2, "Sl");
-		return base(upName,level,color,debugInfo,object)
+		return base(upName,level,color,debugInfo,object,override)
 	end
 	log[name .. "f"] = function (...)
 		return base(upName,level,color,getinfo(2, "Sl"),format(...))
