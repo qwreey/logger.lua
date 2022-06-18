@@ -225,7 +225,7 @@ local function base(levelName,levelNumber,color,debugInfo,object,override)
 
 	-- Get file name and line number
 	local lineinfo
-	local replaceinfo = override and override.noLineInfo or logger.noLineInfo
+	local replaceinfo = override and override.noLineInfo or log.noLineInfo
 	if replaceinfo then
 		lineinfo = type(replaceinfo) == "string" and replaceinfo or ""
 	else
@@ -256,7 +256,7 @@ local function base(levelName,levelNumber,color,debugInfo,object,override)
 		lineinfo -- line info
 	)
 	local headerLen = len(gsub(header,"\27%[%d+m","")) -- Make 6*x len char
-	if not logger.noLiner then
+	if not log.noLiner then
 		local liner = headerLen%6
 		if liner ~= 0 then
 			local adding = 6 - liner
