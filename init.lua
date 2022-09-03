@@ -367,4 +367,8 @@ log.fatalf	= log.fatalf ---@type loggerFormat
 end
 --#endregion
 
+setmetatable(log,{__call = function (self,...)
+	log.info(...)
+end})
+
 return log;
